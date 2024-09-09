@@ -1,0 +1,68 @@
+# Run weaviate on kubernetes
+
+# Create clusters
+kind create cluster --config cluster.yaml
+
+# Add the weaviate helm repo
+helm repo add weaviate https://weaviate.github.io/weaviate-helm
+
+# Generate a configuration file (values.yaml) for the Weaviate Helm chart
+helm show values weaviate/weaviate > values.yaml
+
+# Configure the below in the file
+    type: LoadBalancer  # ⬅️ Set this to LoadBalancer (from NodePort) for gRPC
+    text2vec-cohere:
+    
+    enabled: true  # ⬅️ Make sure this is set to true
+    
+    # ... settings not shown ...
+    generative-cohere:
+    
+    enabled: true  # ⬅️ Make sure this is set to true
+    
+    replicas: 4
+    podManagementPolicy: Parallel
+    
+# Deploy Weaviate
+helm upgrade --install \
+  "weaviate" \
+  weaviate/weaviate \
+  --values ./values.yaml
+
+# View weaviate pods
+kubectl get pods
+
+# Create nginx ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kubectl apply -f ingress.yaml
+
+##############################################
+# Expose cloud9 security group to the internet
+##############################################
+
+# View EC2 public IP
+curl checkip.amazonaws.com
+
+# Test connection
+curl public_ip:80/weaviate OR curl public_ip/weaviate
+curl public_ip:80/weaviategrpc
+
+# Install netcat
+sudo yum install nmap-ncat -y
+
+# Test connection publicly
+nc -zv public_ip 80
+
+# Test gRPC connection locally
+nc -zv localhost 80
+
+# Install weaviate client
+pip install weaviate-client
+
+# Add openai api credentials
+OPENAI=
+echo 'export OPENAI_APIKEY="$OPENAI"' >> ~/.bashrc
+source ~/.bashrc
+
+# Delete cluster
+kind delete cluster

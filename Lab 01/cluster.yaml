@@ -1,0 +1,21 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80 # The k8s service port
+    hostPort: 80 # The host port you want to expose the k8s service
+    listenAddress: "0.0.0.0"
+    protocol: tcp
+  - containerPort: 443 # The k8s service port
+    hostPort: 443 # The host port you want to expose the k8s service
+    listenAddress: "0.0.0.0"
+    protocol: tcp
+- role: worker
+
