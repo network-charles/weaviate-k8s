@@ -1,0 +1,17 @@
+# Create cluster
+minikube start
+
+# Deploy Weaviate
+helm upgrade --install \
+  "weaviate" \
+  weaviate/weaviate \
+  --values ./values.yaml
+
+# Expose the services​
+minikube tunnel &
+sleep 40
+kubectl port-forward svc/weaviate 8080:80 &
+kubectl port-forward svc/weaviate-grpc 50051:50051 &
+
+# Delete cluster
+minikube delete --all

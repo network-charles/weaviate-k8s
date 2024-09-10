@@ -135,7 +135,7 @@ service:
       protocol: TCP
       port: 80
       # Target port is going to be the same for every port
-  type: NodePort
+  type: LoadBalancer
   loadBalancerSourceRanges: []
   # optionally set cluster IP if you want to set a static IP
   clusterIP:
@@ -154,7 +154,7 @@ grpcService:
       protocol: TCP
       port: 50051
       # Target port is going to be the same for every port
-  type: NodePort
+  type: LoadBalancer
   loadBalancerSourceRanges: []
   # optionally set cluster IP if you want to set a static IP
   clusterIP:

@@ -1,0 +1,37 @@
+# Set up monitoring (DataDog on EKS)
+
+Use a launch template for the managed EKS node.
+Reference the security group attached to the EKS cluster in the launch template. This will make the node port accessible to the internet.
+
+# Update the Weaviate helm file
+storage:
+  size: 4Gi
+  storageClassName: "ebs-storage"
+  fullnameOverride: "weaviate-pv"
+
+# Create infrastructure
+terraform init -backend-config=backend.conf
+terraform apply -auto-approve
+
+# Access the EKS cluster CLI
+aws eks update-kubeconfig --name eks
+
+# Confirm that Nodes are Up
+kubectl get nodes
+
+# Configure the datadog agent
+kubectl create secret generic datadog-secret --from-literal api-key=$DATADOG -n datadog-agent
+kubectl apply -f datadog-agent.yaml
+
+# Add the weaviate helm repo
+helm repo add weaviate https://weaviate.github.io/weaviate-helm
+
+# Deploy Weaviate
+helm install "weaviate" weaviate/weaviate --values ./values.yaml
+
+# Curl to the web server using the node-port detail
+curl <public_ip>:<port>
+
+# Clean Up
+kubectl delete -f yaml
+terraform destroy -auto-approve

@@ -1,0 +1,14 @@
+# Lab 01
+Run weaviate on kubernetes (NodePort)
+
+# Lab 02
+Run weaviate on kubernetes (LoadBalancer)
+
+# Lab 03
+Set up authentication and authorization
+
+# Lab 04 
+Set up monitoring (Prometheus & Grafana)
+
+# Lab 05
+Set up monitoring (DataDog on EKS)

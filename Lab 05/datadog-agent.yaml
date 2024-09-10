@@ -1,0 +1,29 @@
+apiVersion: datadoghq.com/v2alpha1
+kind: DatadogAgent
+metadata:
+  name: datadog
+  namespace: datadog-agent
+spec:
+  global:
+    # Required in case the Agent cannot resolve the cluster name through IMDS. See the note below.
+    clusterName: eks
+    registry: public.ecr.aws/datadog
+    site: datadoghq.eu
+    credentials:
+      apiSecret:
+        secretName: datadog-secret
+        keyName: api-key
+  features:
+    kubeStateMetricsCore:
+      enabled: true
+    prometheusScrape:
+      enabled: true
+      enableServiceEndpoints: true
+      additionalConfigs: |-
+        - configurations:
+          - MaxReturnedMetrics: 20000
+            MinCollectInterval: 30
+    orchestratorExplorer:
+      enabled: true
+    liveContainerCollection:
+      enabled: true

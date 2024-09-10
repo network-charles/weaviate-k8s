@@ -1,0 +1,21 @@
+# Set up authentication and authorization
+
+# Enable in your weaviate helm file
+authentication:
+  apikey:
+    enabled: true
+    allowed_keys:
+      - minikube-secret-key
+    users:
+      - minikube
+authorization:
+  admin_list:
+    enabled: true
+    users:
+    - minikube
+
+# Set up infrastructure
+See minikube.demo
+
+# See if client is ready
+run "is client ready.py"

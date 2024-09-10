@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: weaviate
+  labels:
+    release: prometheus # find service monitors in the cluster with this label
+spec:
+  podMetricsEndpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+  selector:
+    matchLabels:
+      app: weaviate

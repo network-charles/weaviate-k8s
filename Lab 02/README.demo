@@ -1,4 +1,4 @@
-# Run weaviate on kubernetes (NodePort)
+# Run weaviate on kubernetes (LoadBalancer)
 
 # Create clusters
 kind create cluster --config cluster.yaml
@@ -10,7 +10,7 @@ helm repo add weaviate https://weaviate.github.io/weaviate-helm
 helm show values weaviate/weaviate > values.yaml
 
 # Configure the below in the file
-    type: NodePort  # ⬅️ Set this to NodePort for gRPC and HTTP
+    type: LoadBalancer  # ⬅️ Set this to NodePort for gRPC and HTTP
     text2vec-openai:
     
     enabled: true  # ⬅️ Make sure this is set to true
