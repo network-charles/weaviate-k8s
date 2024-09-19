@@ -899,7 +899,7 @@ modules:
   text2vec-cohere:
 
     # enable if you want to use Cohere module
-    enabled: true
+    enabled: false
 
     # Set your Cohere API Key to be passed to Weaviate pod as
     # an environment variable

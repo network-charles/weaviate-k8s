@@ -1,4 +1,4 @@
-# Set up monitoring (Prometheus & Grafana)
+# Monitor heap usage 
 
 # Enable in your weaviate helm file
 PROMETHEUS_MONITORING_ENABLED=true
@@ -6,8 +6,12 @@ PROMETHEUS_MONITORING_ENABLED=true
 # Create cluster
 kind create cluster --config cluster.yaml
 
-# Add the weaviate helm repo
-helm repo add weaviate https://weaviate.github.io/weaviate-helm
+# Add a resource memory limit
+resources: {}
+  requests:
+    memory: '4Gi'
+  limits:
+    memory: '2Gi'
 
 # Deploy Weaviate
 helm upgrade --install \
@@ -16,8 +20,6 @@ helm upgrade --install \
   --values ./values.yaml
 
 # Install prometheus stack
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
 helm install prometheus prometheus-community/kube-prometheus-stack
 
 # Modify the weaviate service node ports
@@ -51,14 +53,15 @@ password = prom-operator
 curl localhost:9090
 
 # Apply a pod monitor
-kubectl get prometheuses.monitoring.coreos.com -o yaml # view the serviceMonitorSelector label
 kubectl apply -f pod-monitor.yaml
 
-# Query prometheus
-go_memstats_heap_inuse_bytes{job="default/weaviate"}
+# Install numpy
+run "heap.py"
 
-# Import dashboards
-https://github.com/weaviate/weaviate/tree/master/tools/dev/grafana/dashboards
+# View metrics
+In Grafana, create a dashboard with heap memory-related metrics, like:
+go_memstats_heap_alloc_bytes: Shows the current heap memory allocated.
+go_memstats_heap_sys_bytes: Shows the total heap space obtained from the system.
 
 # Delete cluster
 kind delete cluster

@@ -12,3 +12,6 @@ Set up monitoring (Prometheus & Grafana)
 
 # Lab 05
 Set up monitoring (DataDog on EKS)
+
+# Lab 06
+Monitor heap usage

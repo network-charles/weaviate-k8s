@@ -1,0 +1,18 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 30080 # The k8s service port
+    hostPort: 8080 # The host port you want to expose the k8s service
+    protocol: tcp
+  - containerPort: 30051 # The k8s service port
+    hostPort: 50051 # The host port you want to expose the k8s service
+    protocol: TCP
+  - containerPort: 30000 # The k8s service port
+    hostPort: 3000 # The host port you want to expose the k8s service
+    protocol: TCP
+  - containerPort: 30909 # The k8s service port
+    hostPort: 9090 # The host port you want to expose the k8s service
+    protocol: TCP
+- role: worker
