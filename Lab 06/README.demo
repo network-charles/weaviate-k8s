@@ -9,9 +9,9 @@ kind create cluster --config cluster.yaml
 # Add a resource memory limit
 resources: {}
   requests:
-    memory: '4Gi'
-  limits:
     memory: '2Gi'
+  limits:
+    memory: '4Gi'
 
 # Deploy Weaviate
 helm upgrade --install \
