@@ -35,18 +35,23 @@ helm upgrade --install \
 kubectl get pods
 
 # Modify the weaviate service node ports
-kubectl patch svc weaviate -n ingress-nginx --type='json' -p='[{"op":"replace","path":"/spec/ports/0/nodePort","value":30080}]'
-kubectl patch svc weaviate-grpc -n ingress-nginx --type='json' -p='[{"op":"replace","path":"/spec/ports/1/nodePort","value":30051}]'
+sleep 20
+kubectl patch svc weaviate --type='json' -p='[{"op":"replace","path":"/spec/ports/0/nodePort","value":30080}]'
+kubectl patch svc weaviate-grpc --type='json' -p='[{"op":"replace","path":"/spec/ports/0/nodePort","value":30051}]'
 
 ##############################################
 # Expose cloud9 security group to the internet
 ##############################################
 
+# Create jupyter enviroment
+pip3 install jupyterlab
+jupyter-lab --ip 0.0.0.0 &
+
 # View EC2 public IP
 curl checkip.amazonaws.com
 
-# See if client is ready
-run "is client ready.py" use localhost or public IP
+# See if client is ready in your jupyter enviroment
+run "is client ready.ipynb" for the host variable, use localhost or public IP
 
 # Delete cluster
 kind delete cluster

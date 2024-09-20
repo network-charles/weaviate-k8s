@@ -15,7 +15,30 @@ authorization:
     - minikube
 
 # Set up infrastructure
-See minikube.demo
+# Create cluster
+minikube start
+
+# Deploy Weaviate
+helm upgrade --install \
+  "weaviate" \
+  weaviate/weaviate \
+  --values ./values.yaml
+
+# Expose the services
+minikube tunnel &
+sleep 40
+kubectl port-forward svc/weaviate 8080:80 &
+kubectl port-forward svc/weaviate-grpc 50051:50051 &
+
+# Create jupyter enviroment
+pip3 install jupyterlab
+jupyter-lab --ip 0.0.0.0 &
+
+# View EC2 public IP
+curl checkip.amazonaws.com
 
 # See if client is ready
-run "is client ready.py"
+run "jupyter.ipynb"
+
+# Delete cluster
+minikube delete --all

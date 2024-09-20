@@ -1,5 +1,7 @@
 # Run weaviate on kubernetes (NodePort)
 
+# For minikube see minikube.demo
+
 # Create clusters
 kind create cluster --config cluster.yaml
 
@@ -42,11 +44,15 @@ kubectl patch svc weaviate-grpc -n ingress-nginx --type='json' -p='[{"op":"repla
 # Expose cloud9 security group to the internet
 ##############################################
 
+# Create jupyter enviroment
+pip3 install jupyterlab
+jupyter-lab --ip 0.0.0.0 &
+
 # View EC2 public IP
 curl checkip.amazonaws.com
 
-# See if client is ready
-run "is client ready.py" use localhost or public IP
+# See if client is ready in your jupyter enviroment
+run "is client ready.ipynb" for the host variable, use localhost or public IP
 
 # Delete cluster
 kind delete cluster

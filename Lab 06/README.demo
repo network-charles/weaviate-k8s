@@ -39,11 +39,16 @@ kubectl get secrets prometheus-grafana -o jsonpath='{.data.admin-user}' | base64
 # Expose cloud9 security group to the internet
 ##############################################
 
+# Create jupyter enviroment
+pip3 install jupyterlab
+jupyter-lab --ip 0.0.0.0 &
+
 # View EC2 public IP
 curl checkip.amazonaws.com
 
-# See if client is ready
-run "is client ready.py"
+# Install numpy
+pip install numpy
+run "heap.ipynb" in your jupyter enviroment
 
 # Access grafana dashboard
 username = admin
@@ -55,9 +60,6 @@ curl localhost:9090
 # Apply a pod monitor
 kubectl apply -f pod-monitor.yaml
 
-# Install numpy
-run "heap.py"
-
 # View metrics
 In Grafana, create a dashboard with heap memory-related metrics, like:
 go_memstats_heap_alloc_bytes: Shows the current heap memory allocated.
@@ -65,5 +67,3 @@ go_memstats_heap_sys_bytes: Shows the total heap space obtained from the system.
 
 # Delete cluster
 kind delete cluster
-
-
