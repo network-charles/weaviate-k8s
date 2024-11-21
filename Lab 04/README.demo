@@ -55,7 +55,7 @@ password = prom-operator
 curl localhost:9090
 
 # Apply a pod monitor
-kubectl get prometheuses.monitoring.coreos.com -o yaml # view the serviceMonitorSelector label
+kubectl get prometheuses.monitoring.coreos.com -o yaml # view the podMonitorSelector label
 kubectl apply -f pod-monitor.yaml
 
 # Query prometheus
